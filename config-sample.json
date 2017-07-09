@@ -1,0 +1,13 @@
+{
+    "http_port": 8000,
+    "irc_channel": "#channel",
+    "irc_server": "irc.chathispano.com",
+    "irc_nick": "gitlab",
+    "irc_port": 6667,
+    "provider": "gitlab",
+    "secret": "",
+    "path": "/hooks/",
+    "chan_bot": "CHaN",
+    "google_shortener_apikey": "",
+    "debug": true
+}
