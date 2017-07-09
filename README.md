@@ -1,2 +1,31 @@
 # node-irc-gateway-webhook
-A nodejs http server that posts webhook info into IRC
+
+## Description
+
+A nodejs http server that posts webhook info into IRC.
+
+## Project status
+
+Platforms:
+* GitHub
+* GitLab
+
+Webhooks:
+* Push
+* Issues
+
+## Installation
+
+<code>npm install</code>
+
+## Configuration
+
+You can take a look at the configuration example config-sample.json
+
+## Running
+
+<code>npm start</code>
+
+or
+
+<code>node webhook.js</code>
