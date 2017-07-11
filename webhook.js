@@ -9,6 +9,7 @@ let request = require('request');
 var fs = require('fs');
 
 let default_config = {
+    http_host: '0.0.0.0',
     http_port: 7777,
     irc_channel: '#channel',
     irc_server: 'irc.freenode.net',
@@ -117,7 +118,7 @@ function setup_http_server() {
             res.statusCode = 404;
             res.end('no such location');
         });
-    }).listen(config.http_port);
+    }).listen(config.http_port, config.http_host);
 }
 
 function process_push(event) {
