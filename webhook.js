@@ -66,8 +66,8 @@ function connect_bot() {
         host: config.irc_server,
         port: config.irc_port,
         nick: config.irc_nick,
-        gecos: config.irc_ident,
-        username: config.irc_realname,
+        username: config.irc_ident,
+        gecos: config.irc_realname,
         auto_reconnect_max_retries: 1000,
         ping_interval: config.irc_ping_interval,
     });
