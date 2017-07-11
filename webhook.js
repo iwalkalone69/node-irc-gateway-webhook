@@ -14,6 +14,9 @@ let default_config = {
     irc_channel: '#channel',
     irc_server: 'irc.freenode.net',
     irc_nick: 'webhook',
+    irc_ident: 'webhook',
+    irc_realname: 'webhook',
+    irc_ping_interval: 30,
     irc_port: 6667,
     provider: 'github',
     secret: '',
@@ -63,7 +66,10 @@ function connect_bot() {
         host: config.irc_server,
         port: config.irc_port,
         nick: config.irc_nick,
+        gecos: config.irc_ident,
+        username: config.irc_realname,
         auto_reconnect_max_retries: 1000,
+        ping_interval: config.irc_ping_interval,
     });
 }
 
