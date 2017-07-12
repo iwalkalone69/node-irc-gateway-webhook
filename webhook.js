@@ -226,14 +226,14 @@ function process_issues(event) {
             repo_name = event.payload.repository.full_name;
             id = event.payload.issue.number;
             title = event.payload.issue.title;
-            url = event.payload.issue.url;
+            url = event.payload.issue.html_url;
             break;
     }
 
     if (action === 'closed') {
         msg = util.format('[%s] Issue closed. #%d %s %s', repo_name, id, title, url);
     } else if (action === 'opened') {
-        msg = util.format('[%s] Issue opened. #%d %s %s', repo_name, id, title, url);
+        msg = util.format('[%s] Issue opened or updated. #%d %s %s', repo_name, id, title, url);
     }
 
     if (msg != '') {
