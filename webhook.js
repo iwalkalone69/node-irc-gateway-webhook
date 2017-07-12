@@ -216,7 +216,7 @@ function process_issues(event) {
         case 'gitlab':
             action = event.payload.object_attributes.state;
             repo_name = event.payload.repository.name;
-            id = event.payload.object_attributes.id;
+            id = event.payload.object_attributes.iid;
             title = event.payload.object_attributes.title;
             url = event.payload.object_attributes.url;
             break;
