@@ -32,9 +32,12 @@ var handler = null;
 var bot = new IRC.Client();
 
 let config = {};
-fs.stat('./config.json', function (err, stat) {
+let config_file = process.argv && process.argv[2] ? process.argv[2] : './config.json';
+fs.stat(config_file, function (err, stat) {
     if (err == null) {
-        config = require('./config.json');
+        config = require(config_file);
+    } else {
+        process.exit();
     }
     config = Object.assign(default_config, config);
     if (config.debug === true) {
