@@ -1,7 +1,6 @@
 let IRC = require('irc-framework');
 
 let irc = {
-    is_joined: false,
     debug: false,
     chan: 'ChanServ',
     channel: '#debug',
@@ -45,26 +44,18 @@ let irc = {
             }
         });
         this.connection.on('registered', () => {
-            function d() {
-                if (this.is_joined) return;
-                this.connection.join(this.channel);
-                setTimeout(d, 7000);
-            }
-            d();
+            this.connection.join(this.channel);
         });
         this.connection.on('socket close', () => {
-            this.is_joined = false;
+            process.quit();
         });
         this.connection.on('close', () => {
-            this.is_joined = false;
+            process.quit();
         });
         this.connection.on('invited', (event) => {
             this.connection.join(event.channel);
         });
         this.connection.on('join', event => {
-            if (event.channel.toLowerCase() === this.channel.toLowerCase()) {
-                this.is_joined = true;
-            }
         });
     },
 };
