@@ -9,10 +9,10 @@
     "irc_ping_interval": 30,
     "irc_port": 6667,
     "gitlab": {
-        "secret": "",
+        "secret": ""
     },
     "github": {
-        "secret": "",
+        "secret": ""
     },
     "path": "/hooks/",
     "chan_bot": "CHaN",
