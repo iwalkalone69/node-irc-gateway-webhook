@@ -25,14 +25,14 @@ let parser = {
                 commits = event.payload.commits;
                 total_commits = event.payload.total_commits_count;
                 pusher_name = event.payload.user_name;
-                ref = this.lastItem(event.payload.ref.split('/'));
+                ref = parser.lastItem(event.payload.ref.split('/'));
                 url = event.payload.project.web_url+'/compare/'+event.payload.before.substr(0,7)+'...'+event.payload.after.substr(0,7);
 
                 request({
                     method: 'POST',
                     url: 'https://www.googleapis.com/urlshortener/v1/url',
                     qs: {
-                        'key': this.google_shortener_apikey,
+                        'key': parser.google_shortener_apikey,
                     },
                     body: {
                         longUrl: event.payload.project.web_url+'/compare/'+event.payload.before.substr(0,7)+'...'+event.payload.after.substr(0,7),
@@ -43,10 +43,10 @@ let parser = {
                         url = body.id;
                     }
 
-                    this.irc.say(this.irc_channel, util.format('[%s] %s pushed %d commit(s) to %s. %s', repo.name, pusher_name, total_commits, ref, url));
+                    parser.irc.say(parser.irc_channel, util.format('[%s] %s pushed %d commit(s) to %s. %s', repo.name, pusher_name, total_commits, ref, url));
                     for(let i=0; i<commits.length && i<5; i++){
                         let commit = commits[i];
-                        this.irc.say(this.irc_channel, util.format('[%s] %s %s: %s', repo.name, commit.id.substr(0, 7), commit.author.name, commit.message));
+                        parser.irc.say(parser.irc_channel, util.format('[%s] %s %s: %s', repo.name, commit.id.substr(0, 7), commit.author.name, commit.message));
                     }
                 });
                 break;
@@ -56,7 +56,7 @@ let parser = {
                 commits = event.payload.commits;
                 total_commits = commits.length;
                 pusher_name = event.payload.pusher.name;
-                ref = this.lastItem(event.payload.ref.split('/'));
+                ref = parser.lastItem(event.payload.ref.split('/'));
 
                 request.post({
                     url: 'https://git.io/',
@@ -70,17 +70,17 @@ let parser = {
                         url = response.headers.location;
                     }
 
-                    this.irc.say(this.irc_channel, util.format('[%s] %s pushed %d commit(s) to %s. %s', repo.full_name, pusher_name, total_commits, ref, url));
+                    parser.irc.say(parser.irc_channel, util.format('[%s] %s pushed %d commit(s) to %s. %s', repo.full_name, pusher_name, total_commits, ref, url));
                     for(let i=0; i<commits.length && i<5; i++){
                         let commit = commits[i];
-                        this.irc.say(this.irc_channel, util.format('[%s] %s %s: %s', repo.full_name, commit.id.substr(0, 7), commit.author.username, commit.message));
+                        parser.irc.say(parser.irc_channel, util.format('[%s] %s %s: %s', repo.full_name, commit.id.substr(0, 7), commit.author.username, commit.message));
                     }
                 });
                 break;
         }
     },
     issue: function (event, provider) {
-        if (this.debug === true) {
+        if (parser.debug === true) {
             console.log('Received an issue event for %s action=%s: #%d %s',
                 event.payload.repository.name,
                 event.payload.action,
@@ -121,10 +121,10 @@ let parser = {
         }
 
         if (msg != '') {
-            this.irc.say(this.irc_channel, msg);
+            parser.irc.say(parser.irc_channel, msg);
         }
     },
-    lastItem: function (err) {
+    lastItem: function (arr) {
         return arr[arr.length - 1];
     },
 };
