@@ -8,8 +8,12 @@
     "irc_realname": "gitlab",
     "irc_ping_interval": 30,
     "irc_port": 6667,
-    "provider": "gitlab",
-    "secret": "",
+    "gitlab": {
+        "secret": "",
+    },
+    "github": {
+        "secret": "",
+    },
     "path": "/hooks/",
     "chan_bot": "CHaN",
     "google_shortener_apikey": "",
