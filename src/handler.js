@@ -28,22 +28,22 @@ let handler = {
         console.error('Error:', err.message);
     },
     github_ondata: function(event) {
-        this.ondata(event, 'github');
+        handler.ondata(event, 'github');
     },
     gitlab_ondata: function(event) {
-        this.ondata(event, 'gitlab');
+        handler.ondata(event, 'gitlab');
     },
     ondata: function (event, provider) {
-        if (this.debug === true) {
+        if (handler.debug === true) {
             console.log(event);
         }
         switch (event.event) {
             case 'push':
-                this.parser.push(event, provider);
+                handler.parser.push(event, provider);
                 break;
             case 'issue':
             case 'issues':
-                this.parser.issue(event, provider);
+                handler.parser.issue(event, provider);
                 break;
             default:
                 console.log('Unknown event', event.event);
@@ -52,12 +52,12 @@ let handler = {
     },
     detect: function (req, res) {
         if (req.headers['X-Github-Event'] || req.headers['x-github-event']) {
-            this.githubHandler(req, res, function () {
+            handler.githubHandler(req, res, function () {
                 res.statusCode = 404;
                 res.end('no such location');
             });
         } else if (req.headers['X-Gitlab-Event'] || req.headers['x-gitlab-event']) {
-            this.gitlabHandler(req, res, function () {
+            handler.gitlabHandler(req, res, function () {
                 res.statusCode = 404;
                 res.end('no such location');
             });
