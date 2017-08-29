@@ -47,10 +47,10 @@ let irc = {
             this.connection.join(this.channel);
         });
         this.connection.on('socket close', () => {
-            process.quit();
+            process.exit(-1);
         });
         this.connection.on('close', () => {
-            process.quit();
+            process.exit(-1);
         });
         this.connection.on('invited', (event) => {
             this.connection.join(event.channel);
