@@ -5,6 +5,7 @@
   "main": "webhook.js",
   "private": false,
   "dependencies": {
+    "bitbucket-webhook-handler": "git+https://github.com/otarim/bitbucket-webhook-handler.git",
     "github-webhook-handler": "^0.6.0",
     "gitlab-webhook-handler": "^1.0.1",
     "http": "0.0.0",
