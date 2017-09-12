@@ -106,8 +106,8 @@ let parser = {
                 id = event.payload.object_attributes.iid;
                 title = event.payload.object_attributes.title;
                 url = event.payload.object_attributes.url;
-                user = event.payload.user.login;
-                assignee = event.payload.issue.assignee.login;
+                user = event.payload.user.name;
+                assignee = event.payload.issue.assignee.name;
                 for (i=0; i<event.payload.labels.length; i++) {
                     labels.push(event.payload.labels[i].title);
                 }
@@ -119,8 +119,8 @@ let parser = {
                 id = event.payload.issue.number;
                 title = event.payload.issue.title;
                 url = event.payload.issue.html_url;
-                user = event.payload.user.name;
-                assignee = event.payload.assignee.name;
+                user = event.payload.issue.user.login;
+                assignee = event.payload.issue.assignee.login;
                 for (i=0; i<event.payload.issue.labels.length; i++) {
                     labels.push(event.payload.issue.labels[i].name);
                 }
@@ -131,11 +131,11 @@ let parser = {
             labels.push('-');
         }
         if (action === 'closed' || action === 'close') {
-            msg = util.format('[%s] Issue closed by %s. #%d %s [%s] assigned to %s: %s', user, repo_name, id, title, labels.join(" "), assignee, url);
+            msg = util.format('[%s] Issue closed by %s. #%d %s [%s] assigned to %s: %s', repo_name, user, id, title, labels.join(" "), assignee, url);
         } else if (action === 'opened' || action === 'open') {
-            msg = util.format('[%s] Issue opened by %s. #%d %s [%s] assigned to %s: %s', user, repo_name, id, title, labels.join(" "), assignee, url);
+            msg = util.format('[%s] Issue opened by %s. #%d %s [%s] assigned to %s: %s', repo_name, user, id, title, labels.join(" "), assignee, url);
         } else {
-            msg = util.format('[%s] Issue updated by %s. #%d %s [%s] assigned to %s: %s', user, repo_name, id, title, labels.join(" "), assignee, url);
+            msg = util.format('[%s] Issue updated by %s. #%d %s [%s] assigned to %s: %s', repo_name, user, id, title, labels.join(" "), assignee, url);
         }
 
         if (msg != '') {
