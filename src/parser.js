@@ -97,6 +97,7 @@ let parser = {
         let url = '';
         let user = '';
         let assignee = '';
+        let labels = new Array();
 
         switch (provider) {
             case 'gitlab':
@@ -107,6 +108,9 @@ let parser = {
                 url = event.payload.object_attributes.url;
                 user = event.payload.user.login;
                 assignee = event.payload.issue.assignee.login;
+                for (i=0; i<event.payload.labels.length; i++) {
+                    labels.push(event.payload.labels[i].title);
+                }
                 break;
             case 'github':
             default:
@@ -117,15 +121,21 @@ let parser = {
                 url = event.payload.issue.html_url;
                 user = event.payload.user.name;
                 assignee = event.payload.assignee.name;
+                for (i=0; i<event.payload.issue.labels.length; i++) {
+                    labels.push(event.payload.issue.labels[i].name);
+                }
                 break;
         }
 
+        if (labels.length < 1) {
+            labels.push('-');
+        }
         if (action === 'closed' || action === 'close') {
-            msg = util.format('[%s] Issue closed by %s. #%d %s assigned to %s: %s', user, repo_name, id, title, assignee, url);
+            msg = util.format('[%s] Issue closed by %s. #%d %s [%s] assigned to %s: %s', user, repo_name, id, title, labels.join(" "), assignee, url);
         } else if (action === 'opened' || action === 'open') {
-            msg = util.format('[%s] Issue opened by %s. #%d %s assigned to %s: %s', user, repo_name, id, title, assignee, url);
+            msg = util.format('[%s] Issue opened by %s. #%d %s [%s] assigned to %s: %s', user, repo_name, id, title, labels.join(" "), assignee, url);
         } else {
-            msg = util.format('[%s] Issue updated by %s. #%d %s assigned to %s: %s', user, repo_name, id, title, assignee, url);
+            msg = util.format('[%s] Issue updated by %s. #%d %s [%s] assigned to %s: %s', user, repo_name, id, title, labels.join(" "), assignee, url);
         }
 
         if (msg != '') {
