@@ -95,14 +95,18 @@ let parser = {
         let id = 0;
         let title = '';
         let url = '';
+        let user = '';
+        let assignee = '';
 
         switch (provider) {
             case 'gitlab':
-                action = event.payload.object_attributes.state;
+                action = event.payload.object_attributes.action;
                 repo_name = event.payload.repository.name;
                 id = event.payload.object_attributes.iid;
                 title = event.payload.object_attributes.title;
                 url = event.payload.object_attributes.url;
+                user = event.payload.user.login;
+                assignee = event.payload.issue.assignee.login;
                 break;
             case 'github':
             default:
@@ -111,13 +115,17 @@ let parser = {
                 id = event.payload.issue.number;
                 title = event.payload.issue.title;
                 url = event.payload.issue.html_url;
+                user = event.payload.user.name;
+                assignee = event.payload.assignee.name;
                 break;
         }
 
-        if (action === 'closed') {
-            msg = util.format('[%s] Issue closed. #%d %s %s', repo_name, id, title, url);
-        } else if (action === 'opened') {
-            msg = util.format('[%s] Issue opened or updated. #%d %s %s', repo_name, id, title, url);
+        if (action === 'closed' || action === 'close') {
+            msg = util.format('[%s] Issue closed by %s. #%d %s assigned to %s: %s', user, repo_name, id, title, assignee, url);
+        } else if (action === 'opened' || action === 'open') {
+            msg = util.format('[%s] Issue opened by %s. #%d %s assigned to %s: %s', user, repo_name, id, title, assignee, url);
+        } else {
+            msg = util.format('[%s] Issue updated by %s. #%d %s assigned to %s: %s', user, repo_name, id, title, assignee, url);
         }
 
         if (msg != '') {
