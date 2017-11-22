@@ -129,7 +129,7 @@ let parser = {
                 title = event.payload.object_attributes.title;
                 url = event.payload.object_attributes.url;
                 user = event.payload.user.name;
-                assignee = event.payload.issue.assignee.name;
+                assignee = event.payload.assignee.name;
                 for (i=0; i<event.payload.labels.length; i++) {
                     labels.push(event.payload.labels[i].title);
                 }
