@@ -9,6 +9,7 @@ A nodejs http server that posts webhook info into IRC.
 Platforms:
 * GitHub
 * GitLab
+* BitBucket
 
 Webhooks:
 * Push
