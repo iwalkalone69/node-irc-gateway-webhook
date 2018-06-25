@@ -37,6 +37,9 @@ let irc = {
                     console.log(event);
                 }
             }
+            if (line_parts[1] == 'INVITE') {
+                this.connection.join(line_parts[3].replace(':', ''));
+            }
         });
         this.connection.on('message', event => {
             if (this.debug === true) {
