@@ -53,22 +53,6 @@ let parser = {
                     }
                 });
                 break;
-            case 'bitbucket':
-                repo = event.payload.repository.full_name;
-                commits = event.payload.push.changes[0].commits;
-                total_commits = commits.length;
-                pusher_name = event.payload.actor.display_name;
-                ref = '-';
-                url = event.payload.push.changes[0].links.commits.href;
-                parser.irc.say(parser.irc_channel, util.format('[%s] %s pushed %d commit(s). %s', repo.full_name, pusher_name, total_commits, url));
-                for (let i=0; i<commits.length && i<5; i++) {
-                    let commit = commits[i];
-                    parser.irc.say(parser.irc_channel, util.format('[%s] %s %s: %s', repo, commit.hash.substr(0, 7), commit.author, commit.message));
-                }
-                if (commits.length > 5) {
-                    parser.irc.say(parser.irc_channel, util.format('And %i commits more.', commits.length - 5));
-                }
-                break;
             case 'github':
             default:
                 repo = event.payload.repository;
@@ -139,27 +123,6 @@ let parser = {
                 for (i=0; i<event.payload.labels.length; i++) {
                     labels.push(event.payload.labels[i].title);
                 }
-                break;
-            case 'bitbucket':
-                switch (event.payload.issue.state) {
-                    case 'new':
-                        action = 'open';
-                        break;
-                    case 'resolved':
-                    case 'closed':
-                        action = 'close';
-                        break;
-                    default:
-                        actoin = 'update';
-                        break;
-                }
-                repo_name = event.payload.repository.full_name;
-                id = event.payload.issue.id;
-                title = event.payload.issue.title;
-                url = event.payload.issue.links.html.href;
-                user = event.payload.actor.display_name;
-                assignee = '-';
-                labels.push(event.payload.issue.type);
                 break;
             case 'github':
             default:

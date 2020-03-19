@@ -1,13 +1,11 @@
 let createGithubHandler = require('github-webhook-handler');
 let createGitlabHandler = require('gitlab-webhook-handler');
-let createBitbucketHandler = require('bitbucket-webhook-handler');
 
 let handler = {
     debug: false,
     parser: null,
     githubHandler: null,
     gitlabHandler: null,
-    bitbucketHandler: null,
     setup: function(config, parser) {
         this.debug = config.debug;
         this.parser = parser;
@@ -19,18 +17,12 @@ let handler = {
             path: config.path,
             secret: config.github.secret,
         });
-        this.bitbucketHandler = createBitbucketHandler({
-            path: config.path,
-            secret: config.github.secret,
-        });
     },
     bind: function() {
         this.githubHandler.on('error', this.onerror);
         this.gitlabHandler.on('error', this.onerror);
-        this.bitbucketHandler.on('error', this.onerror);
         this.githubHandler.on('*', this.github_ondata);
         this.gitlabHandler.on('*', this.gitlab_ondata);
-        this.bitbucketHandler.on('*', this.bitbucket_ondata);
     },
     onerror: function (err) {
         console.error('Error:', err.message);
@@ -40,9 +32,6 @@ let handler = {
     },
     gitlab_ondata: function(event) {
         handler.ondata(event, 'gitlab');
-    },
-    bitbucket_ondata: function(event) {
-        handler.ondata(event, 'bitbucket');
     },
     ondata: function (event, provider) {
         if (handler.debug === true) {
@@ -69,11 +58,6 @@ let handler = {
             });
         } else if (req.headers['X-Gitlab-Event'] || req.headers['x-gitlab-event']) {
             handler.gitlabHandler(req, res, function () {
-                res.statusCode = 404;
-                res.end('no such location');
-            });
-        } else if (req.headers['X-Hook-UUID'] || req.headers['x-hook-uuid']) {
-            handler.bitbucketHandler(req, res, function () {
                 res.statusCode = 404;
                 res.end('no such location');
             });
