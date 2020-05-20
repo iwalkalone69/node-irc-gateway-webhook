@@ -114,7 +114,11 @@ let parser = {
                 title = event.payload.issue.title;
                 url = event.payload.issue.html_url;
                 user = event.payload.issue.user.login;
-                assignee = event.payload.issue.assignee.login;
+                if (event.payload.issue.assignee) {
+                    assignee = event.payload.issue.assignee.login;
+                } else {
+                    assignee = '-';
+                }
                 for (i=0; i<event.payload.issue.labels.length; i++) {
                     labels.push(event.payload.issue.labels[i].name);
                 }
