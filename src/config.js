@@ -18,7 +18,6 @@ let default_config = {
     },
     path: '/hooks/',
     chan_bot: 'ChanServ',
-    google_shortener_apikey: '',
     debug: true,
 };
 

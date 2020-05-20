@@ -3,13 +3,11 @@ let util = require('util');
 
 let parser = {
     debug: false,
-    google_shortener_apikey: '',
     irc_channel: '#debug',
     irc: null,
     setup: function (config, irc) {
         this.debug = config.debug;
         this.irc_channel = config.irc_channel;
-        this.google_shortener_apikey = config.google_shortener_apikey;
         this.irc = irc;
     },
     push: function (event, provider) {
@@ -28,30 +26,14 @@ let parser = {
                 ref = parser.lastItem(event.payload.ref.split('/'));
                 url = event.payload.project.web_url+'/compare/'+event.payload.before.substr(0,7)+'...'+event.payload.after.substr(0,7);
 
-                request({
-                    method: 'POST',
-                    url: 'https://www.googleapis.com/urlshortener/v1/url',
-                    qs: {
-                        'key': parser.google_shortener_apikey,
-                    },
-                    body: {
-                        longUrl: event.payload.project.web_url+'/compare/'+event.payload.before.substr(0,7)+'...'+event.payload.after.substr(0,7),
-                    },
-                    json: true,
-                }, function(error, response, body) {
-                    if (!error) {
-                        url = body.id;
-                    }
-
-                    parser.irc.say(parser.irc_channel, util.format('[%s] %s pushed %d commit(s) to %s. %s', repo.name, pusher_name, total_commits, ref, url));
-                    for (let i=0; i<commits.length && i<5; i++) {
-                        let commit = commits[i];
-                        parser.irc.say(parser.irc_channel, util.format('[%s] %s %s: %s', repo.name, commit.id.substr(0, 7), commit.author.name, commit.message));
-                    }
-                    if (commits.length > 5) {
-                        parser.irc.say(parser.irc_channel, util.format('And %i commits more.', commits.length - 5));
-                    }
-                });
+                parser.irc.say(parser.irc_channel, util.format('[%s] %s pushed %d commit(s) to %s. %s', repo.name, pusher_name, total_commits, ref, url));
+                for (let i=0; i<commits.length && i<5; i++) {
+                    let commit = commits[i];
+                    parser.irc.say(parser.irc_channel, util.format('[%s] %s %s: %s', repo.name, commit.id.substr(0, 7), commit.author.name, commit.message));
+                }
+                if (commits.length > 5) {
+                    parser.irc.say(parser.irc_channel, util.format('And %i commits more.', commits.length - 5));
+                }
                 break;
             case 'github':
             default:
